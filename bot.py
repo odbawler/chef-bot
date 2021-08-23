@@ -38,17 +38,15 @@ async def on_error(event, *args, **kwargs):
             raise
 
 async def lookup_meal(foods):
+    # TODO: Move this outside of code
     meals = {'Funghi Crema': ['pasta', 'leek', 'mushroom', 'garlic', 'stock', 'cashew', 'cream',
                 'tarragon'],
         'Spag Bol': ['spaghetti', 'carrot', 'mince', 'tomato', 'tomato puree', 'mushroom',
             'pepper', 'onion', 'garlic', 'cheddar', 'cheese', 'stock']}
-
+    # Construct inital list of meals from dictionary keys
     matches = list(meals.keys())
 
-    # for key in meals.keys():
-    #     for ingredient in foods:
-    #         if ingredient.lower() in meals[key]:
-    #             matches.append(key)
+    # Begin with full list of meals, remove if ingredient not in meal
     for key in meals.keys():
         for ingredient in foods:
             if not ingredient.lower() in meals[key]:
@@ -56,12 +54,12 @@ async def lookup_meal(foods):
 
     #matches = list(dict.fromkeys(matches))
     #matches = str(list(dict.fromkeys(matches)))[1:-1]
-    
     return matches
 
 @bot.command(name='scran', pass_context=True, help='Responds with random recipe from the book')
 async def scran(ctx, *, message):
 
+    # Split message by comman and strip whitespace
     foods =  [x.strip() for x in message.split(',')]
     matched_scran = await lookup_meal(foods)
 
