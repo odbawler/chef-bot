@@ -54,7 +54,7 @@ async def lookup_meal(foods):
 
     #matches = list(dict.fromkeys(matches))
     #matches = str(list(dict.fromkeys(matches)))[1:-1]
-    return matches
+    return str(matches)[1:-1]
 
 @bot.command(name='scran', pass_context=True, help='Responds with random recipe from the book')
 async def scran(ctx, *, message):
