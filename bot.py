@@ -37,14 +37,37 @@ async def on_error(event, *args, **kwargs):
         else:
             raise
 
-@bot.command(name='recipe', help='Responds with random recipe from the book')
-async def recipe(ctx):
-    recipes = [
-        'Funghi Crema',
-        'Spag Bol',
-    ]
+async def lookup_meal(foods):
+    meals = {'Funghi Crema': ['pasta', 'leek', 'mushroom', 'garlic', 'stock', 'cashew', 'cream',
+                'tarragon'],
+        'Spag Bol': ['spaghetti', 'carrot', 'mince', 'tomato', 'tomato puree', 'mushroom',
+            'pepper', 'onion', 'garlic', 'cheddar', 'cheese', 'stock']}
 
-    response = random.choice(recipes)
+    matches = list(meals.keys())
+
+    # for key in meals.keys():
+    #     for ingredient in foods:
+    #         if ingredient.lower() in meals[key]:
+    #             matches.append(key)
+    for key in meals.keys():
+        for ingredient in foods:
+            if not ingredient.lower() in meals[key]:
+                matches.remove(key)
+
+    #matches = list(dict.fromkeys(matches))
+    #matches = str(list(dict.fromkeys(matches)))[1:-1]
+    
+    return matches
+
+@bot.command(name='scran', pass_context=True, help='Responds with random recipe from the book')
+async def scran(ctx, *, message):
+
+    foods =  [x.strip() for x in message.split(',')]
+    matched_scran = await lookup_meal(foods)
+
+    response = matched_scran
+    if not response:
+        response = "There ain't no scran :("
     await ctx.send(response)
 
 bot.run(TOKEN)
